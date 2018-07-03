@@ -95,8 +95,7 @@ def ferospipe(night='', avoid_plot=False, do_class = False, npools=2, lamp='LAMP
 
 	f_res = open(dirout+'proc/'+'results.txt','w')
 
-	if reffile == 'default':
-		reffile = dirin+'reffile.txt'
+	reffile = dirin+'reffile.txt'
 
 	models_path = base+"data/COELHO_MODELS/R_40000b/"
 	order_dir   = base+"feros/wavcals/"
