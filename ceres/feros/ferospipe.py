@@ -772,10 +772,10 @@ def ferospipe(night='', avoid_plot=False, do_class = False, npools=2, lamp='LAMP
 
 		ra2,dec2 = GLOBALutils.getcoords(obname,mjd,filen=reffile)
 		if ra2 !=0 and dec2 != 0:
-		ra = ra2
-		dec = dec2
+			ra = ra2
+			dec = dec2
 		else:
-		print '\t\tUsing the coordinates found in the image header.'
+			print '\t\tUsing the coordinates found in the image header.'
 
 		altitude    =  2335.
 		latitude    = -29.2543
