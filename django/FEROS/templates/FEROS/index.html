@@ -1,0 +1,370 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="Markus Rabus" content="">
+
+    <title>FEROS database</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static "css/simple-sidebar.css" %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'FEROS/style.css' %}" />
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+
+<body>
+
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="{% url 'FEROS:index' %}">
+                    FEROS 
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'FEROS:index' %}">Main</a>
+                </li>
+                <li>
+                    <a href="{% url 'FEROS:raw' %}">RAW data</a>
+                </li>
+                <li>
+                    <a href="{% url 'FEROS:reduced' %}">REDUCED data</a>
+                </li>
+                <li>
+                    <a href="{% url 'FEROS:plotcal' %}">plot calibrations</a>
+                </li>                
+                <!--<li>
+                    <a href="{% url 'FEROS:spectra' %}">Spectra plots</a>
+                </li>-->
+                <li>
+                    <a href="{% url 'FEROS:longtermcal' %}">Long-term calibration plots</a>
+                </li>
+                <li>
+                    <a href="{% url 'FEROS:longtermrv' %}">Long-term RV-standard plots</a>
+                </li>
+                <li>
+                    <a href="{% url 'FEROS:help' %}">Help/Troubshooting</a>
+                </li>                                        
+                <li>
+                    <a href="{% url 'FEROS:contact' %}">Contact</a>
+                </li>
+                <br><br><br><br><br><br><br><br><br>
+<span style="color:white">Written by Markus Rabus</span>
+<br><br><br><br>
+<span style="color:white">If you use reduced spectra in your publications, please cite:</span>
+<br>
+<span style="color:white">Brahm et al. (2017) PASP 129 973</span>                
+                
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+
+{% block maincontent %} 
+        <div id="page-content-wrapper">
+            <div class="container">
+
+                <h2>Current session: {{ cal_night.date_string | date:"Y-m-d" }}</h2>
+
+                {% ifequal error_present is_false %}
+                    <h3> Message:    {{errormsg}}  </h3>
+                {% endifequal %}
+
+                <br><br>
+
+
+                <div class="row">
+
+                    <div class="col-md-1" >
+                        <p> </p>
+                    </div>
+
+
+                    <div class="col-md-1" >
+                        <p> RAW data </p>
+                    </div>
+                    <div class="col-md-1" >
+                        <p> bias </p>
+                    </div>
+                    <div class="col-md-1">
+                        <p> flat </p>
+                    </div>     
+                    <div class="col-md-1" >
+                        <p> ThArNe </p>
+                    </div>                                                    
+                </div>
+
+
+
+
+
+                <div class="row">
+
+                    <div class="col-md-1" >
+                        <p>Fiber 1:</p>
+                    </div>
+
+
+                     {% ifequal raw_fibre1_flag good %}
+                    	<div class="col-md-1">
+                    		<button class="btn success">OK</button>
+ 						</div>
+                    {% else %}
+                        {% ifequal raw_fibre1_flag bad %}
+                    		<div class="col-md-1">
+ 								<button class="btn danger">BAD</button>
+ 							</div>
+                        {% else %}
+                            {% ifequal raw_fibre1_flag warning %}
+                    			<div class="col-md-1">
+ 									<button class="btn warning">WARNING</button>
+ 								</div>
+                            {% else %}
+                    			<div class="col-md-1">
+ 									<button class="btn default"> No data </button>
+ 								</div>       
+                            {% endifequal %}
+                        {% endifequal %}
+                    {% endifequal %}   
+
+
+
+                    {% ifequal raw_fibre1_flag good %}
+                    
+                   		{% ifequal rawbias_flag good %}
+                    		<div class="col-md-1">
+                    			<button class="btn success">{{rawbias_level}}</button>
+ 							</div>                        	
+                        {% else %}
+                     		<div class="col-md-1">
+                    			<button class="btn danger">{{rawbias_level}}</button>
+ 							</div>                          
+                    	{% endifequal %}
+                    
+                    
+                    {% else %}
+                   		<div class="col-md-1">
+ 								<button class="btn default">No data</button>
+ 						</div>        
+                    {% endifequal %}
+                    
+                    
+                    {% ifequal raw_fibre1_flag good %}
+                    
+                   		{% ifequal rawflat1_flag good %}
+                    		<div class="col-md-1">
+                    			<button class="btn success">{{rawflat1_level}}</button>
+ 							</div>                        	
+                        {% else %}
+                     		<div class="col-md-1">
+                    			<button class="btn danger">{{rawflat1_level}}</button>
+ 							</div>                          
+                    	{% endifequal %}
+                    
+                    
+                    {% else %}
+                   		<div class="col-md-1">
+ 							<button class="btn default">No data</button>
+ 						</div>        
+                    {% endifequal %}
+
+                    {% ifequal raw_fibre1_flag good %}
+                    
+                   		{% ifequal rawThArNe1_flag good %}
+                    		<div class="col-md-1">
+                    			<button class="btn success">{{rawThArNe1_level}}</button>
+ 							</div>                        	
+                        {% else %}
+                     		<div class="col-md-1">
+                    			<button class="btn danger">{{rawThArNe1_level}}</button>
+ 							</div>                          
+                    	{% endifequal %}
+                    
+                    
+                    {% else %}
+                   		<div class="col-md-1">
+ 							<button class="btn default">No data</button>
+ 						</div>        
+                    {% endifequal %}
+
+              
+
+                </div>
+
+
+
+                <div class="row">
+
+                    <div class="col-md-1" >
+                        <p>Fiber 2:</p>
+                    </div>     
+
+
+                     {% ifequal raw_fibre2_flag good %}
+                    	<div class="col-md-1">
+                    		<button class="btn success">OK</button>
+ 						</div>
+                    {% else %}
+                        {% ifequal raw_fibre2_flag bad %}
+                    		<div class="col-md-1">
+ 								<button class="btn danger">BAD</button>
+ 							</div>
+                        {% else %}
+                            {% ifequal raw_fibre2_flag warning %}
+                    			<div class="col-md-1">
+ 									<button class="btn warning">WARNING</button>
+ 								</div>
+                            {% else %}
+                    			<div class="col-md-1">
+ 									<button class="btn default"> No data </button>
+ 								</div>       
+                            {% endifequal %}
+                        {% endifequal %}
+                    {% endifequal %}   
+
+
+
+
+                    {% ifequal raw_fibre2_flag good %}
+                    
+                   		{% ifequal rawbias_flag good %}
+                    		<div class="col-md-1">
+                    			<button class="btn success">{{rawbias_level}}</button>
+ 							</div>                        	
+                        {% else %}
+                     		<div class="col-md-1">
+                    			<button class="btn danger">{{rawbias_level}}</button>
+ 							</div>                          
+                    	{% endifequal %}
+                    
+                    
+                    {% else %}
+                   		<div class="col-md-1">
+ 							<button class="btn default">No data</button>
+ 						</div>        
+                    {% endifequal %}
+
+
+
+
+                    {% ifequal raw_fibre1_flag good %}
+                    
+                   		{% ifequal rawflat2_flag good %}
+                    		<div class="col-md-1">
+                    			<button class="btn success">{{rawflat2_level}}</button>
+ 							</div>                        	
+                        {% else %}
+                     		<div class="col-md-1">
+                    			<button class="btn danger">{{rawflat2_level}}</button>
+ 							</div>                          
+                    	{% endifequal %}
+                    
+                    
+                    {% else %}
+                   		<div class="col-md-1">
+ 							<button class="btn default">No data</button>
+ 						</div>        
+                    {% endifequal %}
+
+
+                    {% ifequal raw_fibre2_flag good %}
+                    
+                   		{% ifequal rawThArNe2_flag good %}
+                    		<div class="col-md-1">
+                    			<button class="btn success">{{rawThArNe2_level}}</button>
+ 							</div>                        	
+                        {% else %}
+                     		<div class="col-md-1">
+                    			<button class="btn danger">{{rawThArNe2_level}}</button>
+ 							</div>                          
+                    	{% endifequal %}
+                    
+                    
+                    {% else %}
+                   		<div class="col-md-1">
+ 							<button class="btn default">No data</button>
+ 						</div>        
+                    {% endifequal %}
+
+
+                </div>
+
+
+
+
+
+            </div>          
+
+            <br><br>
+            
+			{% block list_raw %}
+			<br>
+			{% endblock %}	
+			
+			{% block list_reduced %}
+			<br>
+			{% endblock %}
+			
+			{% block longterm %}
+			<br>
+			{% endblock %}					
+			
+			{% block help %}
+			<br>
+			{% endblock %}					
+			
+			{% block contact %}
+			<br>
+			{% endblock %}				
+
+
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+{% endblock %}  
+
+
+
+
+    <!-- jQuery -->
+    <script src="{% static "js/jquery.js" %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+</body>
+
+</html>

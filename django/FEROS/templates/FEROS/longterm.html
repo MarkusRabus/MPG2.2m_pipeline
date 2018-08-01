@@ -1,0 +1,65 @@
+{% extends "FEROS/index.html" %}
+
+
+{% block maincontent %} 
+{% block help %} 
+
+
+            <div class="container">
+
+                <h2>FEROS long-term plots:</h2>
+
+				<br><br>
+
+					<h3> wave solution over time </h3>
+					
+					
+					
+					
+					
+							<div class="large-9 columns">
+			<div id="content-main">
+				{{ figure_wavesol|safe }}
+			</div>
+		</div>
+					
+					
+					
+					
+					
+					
+					
+                    <h3> RV standards over time </h3>
+                    
+                    
+                    		<div class="large-9 columns">
+			<div id="content-main">
+				{{ figure_rvstd|safe }}
+			</div>
+		</div>
+                    
+                    
+                    
+                    
+        </div>
+        <!-- /#page-content-wrapper -->
+
+
+{% endblock %}  
+
+{% endblock %}  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

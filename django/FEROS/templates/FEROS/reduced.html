@@ -1,0 +1,133 @@
+{% extends "FEROS/index.html" %}
+
+
+ <br><br>
+
+ 	{% block list_reduced %} 
+               
+		<h2> {{reduction_message}} </h2>
+
+	 <br><br> <br>
+
+		<div class="row">
+
+        	<div class="col-md-6" >
+            	<h3> Reduced master bias frame present: </h3>
+            </div>
+            {% ifequal red_bias_present is_true %}
+			<div class="col-md-1" >
+            	<h3> <font color="green"> TRUE </font> </h3>
+            </div>
+            {% else %}
+			<div class="col-md-1" >
+            	<h3> <font color="red">FALSE</font> </h3>
+            </div>
+
+        	{% endifequal %}
+
+         </div>
+
+		<div class="row">
+
+        	<div class="col-md-6" >
+            	<h3> Reduced master flat frame present: </h3>
+            </div>
+            {% ifequal red_flat_present is_true %}
+			<div class="col-md-1" >
+            	<h3> <font color="green">TRUE</font> </h3>
+            </div>
+            {% else %}
+			<div class="col-md-1" >
+            	<h3> <font color="red">FALSE</font> </h3>
+            </div>
+
+        	{% endifequal %}
+
+         </div>         
+  
+		<div class="row">
+
+        	<div class="col-md-6" >
+            	<h3> Reduced wave calibration frame present: </h3>
+            </div>
+            {% ifequal red_wave_present is_true %}
+			<div class="col-md-1" >
+            	<h3> <font color="green">TRUE</font> </h3>
+            </div>
+            {% else %}
+			<div class="col-md-1" >
+            	<h3> <font color="red">FALSE</font> </h3>
+            </div>
+
+        	{% endifequal %}
+
+         </div>
+         
+
+		<div class="row">
+
+        	<div class="col-md-6" >
+            	<h3> Reduced Object frame present: </h3>
+            </div>
+            {% ifequal red_obj 0 %}
+
+			<div class="col-md-1" >
+            	<h3> <font color="blue">{{red_obj}}</font> </h3>
+            </div>
+
+            {% else %}
+            
+			<div class="col-md-1" >
+            	<h3> <font color="green">{{red_obj}}</font> </h3>
+            </div>            
+
+        	{% endifequal %}
+
+         </div>
+         
+ <br><br>
+  
+
+
+
+
+                <h3> Wavelength solution: </h3>
+
+                <div class="row">
+
+                    <div class="col-md-3" style="background-color:grey;">
+                        Filename:
+                    </div>
+                    <div class="col-md-3" style="background-color:grey;">
+                        Number of lines:
+                    </div>
+                    <div class="col-md-3" style="background-color:grey;">
+                        Final RMS:
+                    </div>
+                    <div class="col-md-3" style="background-color:grey;">
+                        Achievable precision:
+                    </div>                                    
+                </div>
+
+                <div class="row">                
+                {% for o in wavesol_list %}
+                        <tr class="{% cycle 'row1' 'row2' 'row3' 'row4' %}">
+                             <!-- <div class="col-md-3"> <a href="{% url 'FEROSdb:wavesol' %}" method="post" >  <input type="hidden" name="imagename" value="{{ o.imagename }}" method="post"> {{o.imagename}} </a> </div>-->
+                            <div class="col-md-3"> {{ o.imagename }} </div>
+                            <div class="col-md-3"> {{o.N_l|floatformat:0}} </div>
+                            <div class="col-md-3"> {{o.rms|floatformat:2}} </div>
+                            <div class="col-md-3"> {{o.precision|floatformat:2}} </div>
+                        </tr>
+                {% endfor %}
+                </div>  
+
+         
+
+	{% endblock %}  
+
+
+
+
+
+
+

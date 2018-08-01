@@ -1,0 +1,30 @@
+{% extends "FEROS/index.html" %}
+
+
+{% block maincontent %} 
+{% block help %} 
+
+	<div class="row fullWidth">
+	<h4>Interactive phased corrected light curve</h4>    
+		<div class="large-3 columns">
+		<form action="{% url 'TESScandidates:plot_intlc' candidate.cand_name %}" method="post">
+		{% csrf_token %}
+			<table>
+            	{{ form.as_table }}
+        	</table>    
+			<button class="small round button" name="replot" type="submit"/>Replot</button>
+		</form>
+		</div>
+
+		<div class="large-9 columns">
+			<div id="content-main">
+				{{ figure|safe }}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}  
+
+{% endblock %}  
+
+

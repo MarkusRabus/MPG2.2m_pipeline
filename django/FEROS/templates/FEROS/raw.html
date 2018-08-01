@@ -1,0 +1,134 @@
+{% extends "FEROS/index.html" %}
+
+
+
+{% block list_raw %} 
+
+            <br><br>
+        
+
+                <h3> RAW BIAS frames </h3>
+
+                <div class="row">
+
+                    <div class="col-md-3" style="background-color:grey;">
+                        Filename:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Exposure time:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Readout mode:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Binning:
+                    </div>                                    
+                    <div class="col-md-2" style="background-color:grey;">
+                        Counts:
+                    </div>                                    
+
+                </div>
+
+                <div class="row">
+
+                    {% for o in bias_list %}
+                        <tr class="{% cycle 'row1' 'row2' 'row3' 'row4' 'row5' %}">
+                            <div class="col-md-3"> {{o.imagename}} </div>
+                            <div class="col-md-2"> {{o.exptime|floatformat:2}} </div>
+                            <div class="col-md-2"> {{o.obsmode}} </div>
+                            <div class="col-md-2"> {{o.binning}} </div>
+                            <div class="col-md-2"> {{o.counts}} </div>
+                        </tr>
+                    {% endfor %}
+                </div>
+
+
+            <br><br>
+
+        
+
+                <h3> RAW FLAT frames </h3>
+
+                <div class="row">
+
+                    <div class="col-md-3" style="background-color:grey;">
+                        Filename:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Exposure time:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Readout mode:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Binning:
+                    </div>                                    
+                    <div class="col-md-2" style="background-color:grey;">
+                        Counts:
+                    </div>  
+                </div>
+
+                <div class="row">
+                    {% for o in flat_list %}
+                        <tr class="{% cycle 'row1' 'row2' 'row3' 'row4' 'row5' %}">
+                            <div class="col-md-3"> {{o.imagename}} </div>
+                            <div class="col-md-2"> {{o.exptime|floatformat:2}} </div>
+                            <div class="col-md-2"> {{o.obsmode}} </div>
+                            <div class="col-md-2"> {{o.binning}} </div>
+                            <div class="col-md-2"> {{o.counts1|floatformat:0}} / {{o.counts2|floatformat:0}}</div>
+                        </tr>
+                    {% endfor %}
+                </div>      
+
+
+            <br><br>
+
+
+        
+
+                <h3> RAW Th Ar Ne frames </h3>
+
+                <div class="row">
+
+                    <div class="col-md-3" style="background-color:grey;">
+                        Filename:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Exposure time:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Readout mode:
+                    </div>
+                    <div class="col-md-2" style="background-color:grey;">
+                        Binning:
+                    </div>                                    
+                    <div class="col-md-2" style="background-color:grey;">
+                        Counts:
+                    </div>   
+                                                     
+                </div>
+
+                <div class="row">                
+                {% for o in tharne_list %}
+                        <tr class="{% cycle 'row1' 'row2' 'row3' 'row4' 'row5' %}">
+                            <div class="col-md-3"> {{o.imagename}} </div>
+                            <div class="col-md-2"> {{o.exptime|floatformat:2}} </div>
+                            <div class="col-md-2"> {{o.obsmode}} </div>
+                            <div class="col-md-2"> {{o.binning}} </div>
+                            <div class="col-md-2"> {{o.counts1|floatformat:0}} / {{o.counts2|floatformat:0}} </div>
+                        </tr>
+                {% endfor %}
+                </div>  
+
+
+
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+{% endblock %}  
+
+
+

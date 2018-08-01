@@ -1,0 +1,25 @@
+{% extends "FEROS/index.html" %}
+
+{% block list_reduced %} 
+
+
+<div class="container">
+
+	<h3> BIAS frames </h3>
+
+		<form action="{% url 'FEROS:plotcal' %}" method="post">
+		{{ form }}
+		<input type="submit" value="Plot" />
+		</form>		
+					
+		<div class="large-9 columns">
+			<div id="content-main">
+				{{ figure_calib|safe }}
+			</div>
+		</div> 
+</div>
+        <!-- /#page-content-wrapper -->
+
+
+{% endblock %}  
+
