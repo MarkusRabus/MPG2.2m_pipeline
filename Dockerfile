@@ -5,6 +5,7 @@ MAINTAINER Markus Rabus <mrabus@astro.puc.cl>
 ENV SECRET_KEY='pmzg#e2hb%!a#pb^p2a=oo=v$fdazk39v)(j5@&mk%uv6w&iar'
 ENV FEROS_DATA_PATH='/home/feros_data/'
 ENV STATIC_STORAGE whitenoise.storage.CompressedManifestStaticFilesStorage
+ENV PYTHONPATH "${PYTHONPATH}:/code/"
 
 RUN yum -y update; yum clean all
 RUN yum install -y epel-release; yum clean all 
