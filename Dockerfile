@@ -6,10 +6,6 @@ ENV SECRET_KEY='pmzg#e2hb%!a#pb^p2a=oo=v$fdazk39v)(j5@&mk%uv6w&iar'
 ENV FEROS_DATA_PATH='/home/feros_data/'
 ENV STATIC_STORAGE whitenoise.storage.CompressedManifestStaticFilesStorage
 ENV PYTHONPATH "${PYTHONPATH}:/code/"
-ENV MYSQL_USER='feros'
-ENV MYSQL_PASSWORD='feros'
-ENV MYSQL_HOST_IP='134.171.103.57'
-ENV MYSQL_PORT=0
 ENV FEROS_DATA_PATH='/data/'
 ENV DIRECTORY_TO_WATCH='/original_data/'
 
