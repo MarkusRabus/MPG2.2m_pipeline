@@ -30,6 +30,6 @@ RUN mkdir /code/static/
 WORKDIR /code
 RUN git clone git://github.com/MarkusRabus/MPG2.2m_pipeline.git 
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r MPG2.2m_pipeline/requirements.txt
 
-EXPOSE 8000
+ENTRYPOINT ["/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
