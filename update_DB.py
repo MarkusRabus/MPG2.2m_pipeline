@@ -6,6 +6,7 @@ import os
 import sys
 import django
 from django.core.exceptions import ObjectDoesNotExist
+from ferospipe import ferospipe
 
 
 nightfmt="%Y-%m-%d"
@@ -19,6 +20,16 @@ django.setup()
 
 from FEROS.models import *
 
+
+normal_obsmode = {  'HIERARCH ESO DET READ CLOCK'   : 'R 225Kps Low Gain',
+                    'CDELT1'                        : 1,
+                    'CDELT2'                        : 1, }
+
+HIERARCH_ESO_TPL_NAME = [   'FEROS bias',
+                            'FEROS flatfield',
+                            'FEROS ThAr+Ne wavelength calibration',
+                            'FEROS obs.object-cal',
+                        ]
 
 
 @custom_model
@@ -76,6 +87,65 @@ def get_rawcounts_level(path,imtype):
 				np.max([fitted_gauss1.amp2a,fitted_gauss1.amp2b])]
 
 
+
+
+def trigger_ceres():
+
+    try:
+        night  = NIGHT.objects.get( calibration_night=get_session() )
+        if night.all_rawcal:
+            print 'DATA REDUCTION triggered'    
+
+
+def trigger_folder(src_path):
+
+    current_session = get_session().strftime(nightfmt)
+
+    if current_session == src_path.split('/')[-1]:
+        copy_path       = copy2root+get_session().strftime(nightfmt)+'/RAW/'
+        if not os.path.exists(copy_path):
+            os.makedirs(copy_path)
+    else:
+
+        print '---------------------------------------------------------------'
+        print 'Session and Remote night folder are different !!!!'
+        print get_session().strftime(nightfmt)
+        print src_path.split('/')[-2]
+        print '---------------------------------------------------------------'
+
+
+def trigger_copy(src_path):
+
+    current_session = get_session().strftime(nightfmt)
+    if current_session == src_path.split('/')[-2]:
+
+        filename        = src_path.split('/')[-1]
+        copy_path       = copy2root+get_session().strftime(nightfmt)+'/RAW/'
+
+        if not os.path.exists(copy_path):
+            os.makedirs(copy_path)
+
+        if filename.split('.')[0] == 'FEROS':
+
+            hdr = pf.getheader(src_path)
+
+            if normal_obsmode['HIERARCH ESO DET READ CLOCK'] == hdr['HIERARCH ESO DET READ CLOCK'] and \
+                normal_obsmode['CDELT1'] == hdr['CDELT1'] and \
+                normal_obsmode['CDELT2'] == hdr['CDELT2'] and \
+                hdr['HIERARCH ESO TPL NAME'] in HIERARCH_ESO_TPL_NAME:
+
+                cmd='rsync -avz %s %s' %(  src_path, copy_path )
+                status = subprocess.call(cmd, shell=True)
+        else:
+            print 'NOT FEROS!!!!'
+
+    else:
+
+        print '---------------------------------------------------------------'
+        print 'Session and Remote night folder are different !!!!'
+        print get_session().strftime(nightfmt)
+        print src_path.split('/')[-2]
+        print '---------------------------------------------------------------'
 
 
 
