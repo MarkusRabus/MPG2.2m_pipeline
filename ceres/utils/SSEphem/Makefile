@@ -7,7 +7,7 @@ PY_PREFIX := /usr/
 
 #You might also need to update these other three lines
 SWIG = swig
-INUM = $(PY_PREFIX)/lib64/python2.7/site-packages/numpy/core/include/numpy/
+INUM = $(PY_PREFIX)/local/lib/python2.7/dist-packages/numpy/core/include/numpy/
 PY   = $(PY_PREFIX)/include/python2.7/
 
 # Do not change below here

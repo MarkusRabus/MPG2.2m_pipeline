@@ -68,6 +68,9 @@ def Build(directory):
     # We obtain al files and folders of the current directory...
 
     files_and_folders = glob.glob(directory+'/*')
+
+    print 'BUILD:   ',files_and_folders
+
     CFileFound = False
     SetupFileFound = False
     # ...and we check each folder or file:
@@ -153,6 +156,9 @@ for dire in dirs:
 dirs = ndirs
 for directory in dirs:
     # To each directory, we apply the build function:
+
+    print 'DIRECTORY:   ',directory
+
     if(directory == 'utils/SSEphem'):
        print "     > Installing SSEphem...\n \n"
        os.chdir('utils/SSEphem/SOFA')
