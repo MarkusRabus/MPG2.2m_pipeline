@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM debian:jessie
 MAINTAINER Markus Rabus <mrabus@astro.puc.cl>
 
 # Environment Variables
