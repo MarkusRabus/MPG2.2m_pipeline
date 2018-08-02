@@ -6,20 +6,23 @@ ENV SECRET_KEY='pmzg#e2hb%!a#pb^p2a=oo=v$fdazk39v)(j5@&mk%uv6w&iar'
 ENV FEROS_DATA_PATH='/home/feros_data/'
 
 RUN apt-get update 
-RUN apt-get install -y --no-install-recommends gcc
-RUN apt-get install -y --no-install-recommends python
-RUN apt-get install -y --no-install-recommends gfortran
-RUN apt-get install -y --no-install-recommends g++
-RUN apt-get install -y --no-install-recommends wget
-RUN apt-get install -y --no-install-recommends nodejs 
-RUN apt-get install -y --no-install-recommends swig 
-RUN apt-get install -y --no-install-recommends fonts-texgyre 
-RUN apt-get install -y --no-install-recommends libgsl0-dev 
-RUN apt-get install -y --no-install-recommends nano 
-RUN apt-get install -y --no-install-recommends git 
-RUN apt-get install -y --no-install-recommends make 
-RUN apt-get install -y --no-install-recommends locales
-RUN apt-get install -y --no-install-recommends python-pip
+RUN apt-get install -y --no-install-recommends gcc \
+     python \
+     gfortran \
+     g++ \
+     wget \
+     nodejs \
+     swig \
+     fonts-texgyre \
+     libgsl0-dev \
+     nano \
+     git \
+     make \
+     locales \
+     libssl-dev \
+     libcurl4-openssl-dev \
+     python-dev \
+     python-pip \
 
 ## Configure default locale, see https://github.com/rocker-org/rocker/issues/19
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
