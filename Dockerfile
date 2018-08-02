@@ -43,7 +43,6 @@ WORKDIR /code
 
 RUN git clone git://github.com/MarkusRabus/MPG2.2m_pipeline.git
 
-RUN pip install numpy scipy PyAstronomy
 RUN pip install --no-cache-dir -r MPG2.2m_pipeline/requirements.txt
 
 RUN ["chmod", "+x", "/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
