@@ -1,6 +1,6 @@
 import sys
 import math
-from astropy.io import fits as pyfits
+import pyfits
 import numpy
 import scipy
 from scipy import optimize

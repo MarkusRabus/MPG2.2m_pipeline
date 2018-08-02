@@ -6,7 +6,7 @@ import scipy
 import time
 import os
 import math
-from astropy.io import fits as pyfits
+import pyfits
 import vels
 from scipy import optimize
 from scipy import interpolate
