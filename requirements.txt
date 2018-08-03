@@ -1,14 +1,12 @@
 numpy
 scipy
-PyAstronomy
 matplotlib
-pycurl
+astropy
 pyfits
 pyephem==3.7.6.0
 statsmodels
 watchdog
 cython
-astropy
 django
 django-tables2
 mpld3
@@ -17,3 +15,4 @@ gunicorn
 Jinja2
 gevent
 whitenoise
+PyAstronomy
