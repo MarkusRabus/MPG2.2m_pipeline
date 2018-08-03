@@ -3,11 +3,11 @@
 # JPL DE403 ephemerides.
 
 #Update this line!
-PY_PREFIX := /usr/
+PY_PREFIX := /opt/conda/
 
 #You might also need to update these other three lines
-SWIG = swig
-INUM = $(PY_PREFIX)/local/lib/python2.7/dist-packages/numpy/core/include/numpy/
+SWIG = /usr/bin/swig
+INUM = $(PY_PREFIX)/lib/python2.7/site-packages/numpy/core/include/numpy/
 PY   = $(PY_PREFIX)/include/python2.7/
 
 # Do not change below here
