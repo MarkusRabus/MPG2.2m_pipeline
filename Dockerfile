@@ -1,20 +1,61 @@
 FROM debian:wheezy
 MAINTAINER Markus Rabus <mrabus@astro.puc.cl>
 
+# ensure local python is preferred over distribution python
+ENV PATH /usr/local/bin:$PATH
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-ENV PATH /opt/conda/bin:$PATH
 
-#RUN echo "deb http://packages.debian.org/wheezy/gcc-4.4" >> /etc/apt/sources.list
-
-RUN apt-get update --fix-missing && apt-get install -y gcc-4.4 gfortran-4.4 g++-4.4 make wget  \
-    libglib2.0-0 libxext6 libsm6 libxrender1 libgsl0-dev bzip2 ca-certificates nano git swig zip
-
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get update && \
+    apt-get install -y gcc-4.4 \
+    gfortran-4.4 \
+    g++-4.4 \
+    make \ 
+    wget
 
 RUN ln -s /usr/bin/gcc-4.4 /usr/bin/gcc && \
     ln -s /usr/bin/gfortran-4.4 /usr/bin/gfortran && \
     ln -s /usr/bin/cpp-4.4 /usr/bin/cpp && \
     ln -s /usr/bin/g++-4.4 /usr/bin/g++
+
+
+RUN apt-get install -y ca-certificates \
+    libreadline-gplv2-dev \
+    libncursesw5-dev \
+    libssl-dev \
+    libsqlite3-dev \
+    tk-dev \
+    libgdbm-dev \
+    libc6-dev \
+    libbz2-dev
+
+RUN wget https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tgz && \
+    tar -xzf Python-2.7.13.tgz -C /usr/src  && \
+    cd /usr/src/Python-2.7.13 && \
+    ./configure && \
+    make && \
+    make altinstall
+
+RUN ln -s /usr/local/bin/python2.7 /usr/local/bin/python
+
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+    python get-pip.py
+
+RUN apt-get install --no-install-recommends -y libgsl0-dev 
+RUN apt-get install --no-install-recommends -y nano
+RUN apt-get install --no-install-recommends -y git
+RUN apt-get install --no-install-recommends -y swig
+RUN apt-get install --no-install-recommends -y curl
+RUN apt-get install --no-install-recommends -y zip unzip
+RUN apt-get install --no-install-recommends -y libopenblas-dev
+RUN apt-get install --no-install-recommends -y r-base
+RUN apt-get install --no-install-recommends -y libffi-dev libssl-dev
+
+RUN rm -rf /var/lib/apt/lists/*
+
+# Need to do this outside of requirements.txt, needed for packages in requirements.txt
+RUN pip install --no-cache-dir numpy
+RUN pip install --no-cache-dir scipy
+RUN pip install --no-cache-dir matplotlib
 
 RUN mkdir /code/
 RUN mkdir /code/static/
@@ -22,31 +63,13 @@ WORKDIR /code
 
 RUN git clone git://github.com/MarkusRabus/MPG2.2m_pipeline.git
 
-RUN wget --quiet https://repo.anaconda.com/archive/Anaconda2-4.3.0-Linux-x86_64.sh -O ~/anaconda.sh && \
-    /bin/bash ~/anaconda.sh -b -p /opt/conda && \
-    rm ~/anaconda.sh && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
-    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
-    echo "conda activate base" >> ~/.bashrc
+RUN pip install --no-cache-dir -r MPG2.2m_pipeline/requirements.txt
 
-RUN conda install numpy
-RUN conda install scipy
-RUN conda install matplotlib
-RUN conda install -c r rpy2 
-RUN conda install pycurl
-RUN conda install ephem
-RUN conda install libgfortran==1
+RUN git clone git://github.com/statsmodels/statsmodels.git
+RUN cd statsmodels && \
+    python setup.py install
 
-RUN cd MPG2.2m_pipeline && \
-    tar xvf PyAstronomy-0.8.1.tar && \
-    unzip PyFITS.zip && \
-    cd PyAstronomy-0.8.1 && \
-    python setup.py install && \
-    cd ../PyFITS-master && \
-    python setup.py install 
-
-RUN conda install -c statsmodels statsmodels 
-RUN conda install numpy
+RUN apt-get install --no-install-recommends -y python-dev
 
 RUN ["chmod", "+x", "/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
 ENTRYPOINT ["/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
