@@ -2,7 +2,7 @@
 
 #cd MPG2.2m_pipeline/ceres && \
 #python install.py
-
+echo Starting WATCHDOG !!!!!!!!!!!
 nohub python watcher.py &
 
 cd MPG2.2m_pipeline/django
@@ -15,7 +15,7 @@ touch /srv/logs/access.log
 tail -n 0 -f /srv/logs/*.log &
 
 # Start Gunicorn processes
-echo Starting Gunicorn.
+echo Starting GUNICORN !!!!!!!!!!
 exec gunicorn MPG2p2m.wsgi -k gevent \
     --name MPG2p2m \
     --bind 0.0.0.0:80 \

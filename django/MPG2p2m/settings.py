@@ -142,7 +142,6 @@ USE_TZ = True
 # https://stackoverflow.com/questions/38627393/docker-django-404-for-web-static-files-but-fine-for-admin-static-files
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
