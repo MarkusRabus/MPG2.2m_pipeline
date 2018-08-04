@@ -1,6 +1,15 @@
 FROM debian:wheezy
 MAINTAINER Markus Rabus <mrabus@astro.puc.cl>
 
+
+# Environment Variables
+ENV SECRET_KEY='pmzg#e2hb%!a#pb^p2a=oo=v$fdazk39v)(j5@&mk%uv6w&iar'
+ENV FEROS_DATA_PATH='/home/feros_data/'
+ENV STATIC_STORAGE whitenoise.storage.CompressedManifestStaticFilesStorage
+ENV PYTHONPATH "${PYTHONPATH}:/code/"
+ENV FEROS_DATA_PATH='/data/'
+ENV DIRECTORY_TO_WATCH='/original_data/'
+
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -54,6 +63,9 @@ RUN apt-get install --no-install-recommends -y libffi-dev libssl-dev
 RUN pip install --no-cache-dir numpy
 RUN pip install --no-cache-dir scipy
 RUN pip install --no-cache-dir matplotlib
+
+RUN mkdir /srv/
+RUN mkdir /srv/logs/
 
 RUN mkdir /code/
 RUN mkdir /code/static/
