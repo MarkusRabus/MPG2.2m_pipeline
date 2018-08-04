@@ -1,7 +1,6 @@
 astropy
 pyfits
 pyephem==3.7.6.0
-statsmodels
 watchdog
 cython
 django
