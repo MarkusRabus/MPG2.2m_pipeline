@@ -7,6 +7,8 @@ import numpy as np
 from math import floor
 from datetime import datetime
 
+from astropy.modeling.fitting import LevMarLSQFitter
+from astropy.modeling.models import custom_model
 
 import os
 
@@ -25,6 +27,64 @@ HIERARCH_ESO_TPL_NAME = (	('bias' 	, 'FEROS bias'),
 							('lamp'  	, 'FEROS ThAr+Ne wavelength calibration'),
 							('object-cal' 	, 'FEROS obs.object-cal')
 						)
+
+
+
+@custom_model
+def model_gaussian2(x, 	amp1a = 15000, amp1b = 15000 , g1a_mean = 20., sigma1=1., 
+						amp2a = 15000, amp2b = 15000 , g2a_mean = 40., sigma2=1., 
+						offset=200.):
+
+	g1b_mean = g1a_mean + 5
+	g2b_mean = g2a_mean + 5
+
+	g1a = apmodel.Gaussian1D(amp1a, g1a_mean, sigma1)
+	g1b = apmodel.Gaussian1D(amp1b, g1b_mean, sigma1)
+
+	g2a = apmodel.Gaussian1D(amp2a, g2a_mean, sigma2)
+	g2b = apmodel.Gaussian1D(amp2b, g2b_mean, sigma2)
+
+	return  g1a(x) + g1b(x) + g2a(x) + g2b(x) + offset
+
+
+
+
+def get_rawcounts_level(path,imtype):
+
+	if imtype == 'bias':
+		tmpdata = pf.getdata(path)
+		return np.mean(tmpdata[1000:3000,300:1800])
+
+	elif imtype == 'flat':
+		gauss_fitter 			= LevMarLSQFitter()
+
+		specdata1 = pf.getdata(path)[2050,1050:1120]
+
+		feros_gauss = model_gaussian2(	amp1a = np.max(specdata1), amp1b = np.max(specdata1) , g1a_mean = 23., sigma1=1.5, 
+								amp2a = np.max(specdata1), amp2b = np.max(specdata1) , g2a_mean = 41., sigma2=1.5, 
+								offset=200.)
+
+		x = np.linspace(0, specdata1.shape[0], specdata1.shape[0])
+		fitted_gauss1 = gauss_fitter(feros_gauss, x, specdata1)	
+		return [np.max([fitted_gauss1.amp1a,fitted_gauss1.amp1b]), 
+				np.max([fitted_gauss1.amp2a,fitted_gauss1.amp2b])]
+
+	elif imtype == 'lamp':
+		gauss_fitter 			= LevMarLSQFitter()
+
+		specdata1 = pf.getdata(path)[2059,1000:1070]
+
+		feros_gauss = model_gaussian2(	amp1a = np.max(specdata1), amp1b = np.max(specdata1) , g1a_mean = 23., sigma1=1.5, 
+								amp2a = np.max(specdata1), amp2b = np.max(specdata1) , g2a_mean = 41., sigma2=1.5, 
+								offset=200.)
+
+		x = np.linspace(0, specdata1.shape[0], specdata1.shape[0])
+		fitted_gauss1 = gauss_fitter(feros_gauss, x, specdata1)
+
+		return [np.max([fitted_gauss1.amp1a,fitted_gauss1.amp1b]),
+				np.max([fitted_gauss1.amp2a,fitted_gauss1.amp2b])]
+
+
 
 
 def get_session():

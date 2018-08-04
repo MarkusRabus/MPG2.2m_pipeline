@@ -14,6 +14,9 @@ ENV DIRECTORY_TO_WATCH='/original_data/'
 ENV PATH /usr/local/bin:$PATH
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
+# EXPOSE port 8000 to allow communication to/from server
+EXPOSE 8000
+
 RUN apt-get update && \
     apt-get install -y gcc-4.4 \
     gfortran-4.4 \

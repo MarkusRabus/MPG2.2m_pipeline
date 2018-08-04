@@ -25,7 +25,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['w2p2pipe.ls.eso.org']
+ALLOWED_HOSTS = ['w2p2pipe.ls.eso.org','134.171.103.57']
 
 
 # Application definition
