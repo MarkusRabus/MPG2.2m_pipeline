@@ -1,4 +1,5 @@
 astropy
+pandas
 pyfits
 pyephem==3.7.6.0
 watchdog
@@ -12,3 +13,4 @@ Jinja2
 gevent
 whitenoise
 PyAstronomy
+patsy
