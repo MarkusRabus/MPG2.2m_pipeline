@@ -50,8 +50,6 @@ RUN apt-get install --no-install-recommends -y libopenblas-dev
 RUN apt-get install --no-install-recommends -y r-base
 RUN apt-get install --no-install-recommends -y libffi-dev libssl-dev
 
-RUN rm -rf /var/lib/apt/lists/*
-
 # Need to do this outside of requirements.txt, needed for packages in requirements.txt
 RUN pip install --no-cache-dir numpy
 RUN pip install --no-cache-dir scipy
@@ -70,6 +68,7 @@ RUN cd statsmodels && \
     python setup.py install
 
 RUN apt-get install --no-install-recommends -y python-dev
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN ["chmod", "+x", "/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
 ENTRYPOINT ["/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
