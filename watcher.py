@@ -7,7 +7,7 @@ from astropy.io import fits as pf
 import subprocess
 import os, sys
 import django
-from update_DB import update_DB, trigger_copy, trigger_ceres
+from update_DB import update_DB, trigger_copy, trigger_ceres, trigger_folder
 
 
 
@@ -21,7 +21,7 @@ class Watcher:
 
     def run(self):
         event_handler = Handler()
-        print '-------------   WATCHING: '+DIRECTORY_TO_WATCH
+        print '-------------   WATCHING: '+self.DIRECTORY_TO_WATCH
         self.observer.schedule(event_handler, self.DIRECTORY_TO_WATCH, recursive=True)
         self.observer.start()
         try:
