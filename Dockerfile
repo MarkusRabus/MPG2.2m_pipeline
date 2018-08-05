@@ -65,7 +65,7 @@ RUN apt-get install --no-install-recommends -y libgsl0-dev
 RUN apt-get install --no-install-recommends -y nano
 RUN apt-get install --no-install-recommends -y git
 RUN apt-get install --no-install-recommends -y swig
-RUN apt-get install --no-install-recommends -y curl
+RUN apt-get install --no-install-recommends -y libcurl4-openssl-dev
 RUN apt-get install --no-install-recommends -y zip unzip
 RUN apt-get install --no-install-recommends -y libopenblas-dev
 RUN apt-get install --no-install-recommends -y r-base
