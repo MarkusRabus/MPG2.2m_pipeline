@@ -22,7 +22,9 @@ RUN apt-get update && \
     gfortran-4.4 \
     g++-4.4 \
     make \ 
-    wget
+    wget \
+    git \
+    nano
 
 RUN ln -s /usr/bin/gcc-4.4 /usr/bin/gcc && \
     ln -s /usr/bin/gfortran-4.4 /usr/bin/gfortran && \
@@ -39,6 +41,8 @@ RUN apt-get install -y ca-certificates \
     libgdbm-dev \
     libc6-dev \
     libbz2-dev
+
+RUN git clone git://github.com/MarkusRabus/MPG2.2m_pipeline.git
 
 RUN mkdir /srv/logs/ && mkdir /code/
 WORKDIR /code    
@@ -69,8 +73,6 @@ RUN apt-get install --no-install-recommends -y libffi-dev libssl-dev
 RUN pip install --no-cache-dir numpy && \
     pip install --no-cache-dir scipy && \
     pip install --no-cache-dir matplotlib
-
-RUN git clone git://github.com/MarkusRabus/MPG2.2m_pipeline.git
 
 RUN pip install --no-cache-dir -r /MPG2.2m_pipeline/requirements.txt
 
