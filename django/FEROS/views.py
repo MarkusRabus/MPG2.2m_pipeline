@@ -153,8 +153,8 @@ def index_context():
 		context['error_present']        = error_present
 		context['errormsg']             = errormsg
 
-    except ObjectDoesNotExist:
- 
+	except ObjectDoesNotExist:
+
 		context['error_present']        = True
 		context['errormsg']             = 'No FEROS files present!'
 
