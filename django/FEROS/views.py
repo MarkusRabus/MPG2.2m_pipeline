@@ -55,7 +55,7 @@ def index_context():
 
 	try:
 
-		night 			= get_object_or_404( NIGHT,calibration_night=get_session() )
+		night  = NIGHT.objects.get( calibration_night=get_session() )
 		context['cal_night']=night
 
 		# NEW access sql database, to get list
@@ -156,6 +156,8 @@ def index_context():
 
 	except ObjectDoesNotExist:
 
+		night =  NIGHT(calibration_night=Time(1721426.0,format='jd', scale='utc').datetime,all_rawcal = False, masterbias = False, masterflat = False, wavesol_flag = False)
+		context['cal_night']=night
 		context['error_present']        = True
 		context['errormsg']             = 'No FEROS files present!'
 
