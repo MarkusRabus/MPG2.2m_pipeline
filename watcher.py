@@ -40,7 +40,7 @@ class Handler(FileSystemEventHandler):
     @staticmethod
     def on_any_event(event):
         if event.is_directory:
-             print "FOLDER event received created event - %s" % event.src_path
+            print "FOLDER event received created event - %s" % event.src_path
             trigger_folder(event.src_path)
 
         elif event.event_type == 'created':
