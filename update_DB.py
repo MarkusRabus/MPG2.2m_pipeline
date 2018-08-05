@@ -40,7 +40,9 @@ def trigger_ceres():
     try:
         night  = NIGHT.objects.get( calibration_night=get_session() )
         if night.all_rawcal:
-            print 'DATA REDUCTION triggered'    
+            print 'DATA REDUCTION triggered'
+    except ObjectDoesNotExist:
+    	print 'NIGHT does not exist'
 
 
 def trigger_folder(src_path):

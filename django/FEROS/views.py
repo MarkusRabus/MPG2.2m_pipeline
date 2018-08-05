@@ -52,106 +52,112 @@ def index_context():
 			'is_false'              : False, 
 			'is_none'               : None, }
 
+	try:
+
+		night 			= get_object_or_404( NIGHT,calibration_night=get_session() )
+		context['cal_night']=night
+
+		# NEW access sql database, to get list
+		# other program, e.g. watchdog writes in database and copy files.
+		bias_list           = RAW_BIAS.objects.filter( session=get_session() )
+		flat_list           = RAW_FLAT.objects.filter( session=get_session() )
+		lamp_list           = RAW_LAMP.objects.filter( session=get_session() )
+		stat_fibre1_flag    = 'G'
+		stat_fibre2_flag    = 'G'
+		raw_fibre1_flag     = None
+		raw_fibre2_flag     = None
+
+		if night.all_rawcal:
+			error_present=True
+			raw_fibre1_flag ='G'
+			raw_fibre2_flag ='G'
+
+			####
+			#  BIAS Level
+			####
+
+			rawbias_level = np.mean( [bias_list[0].counts,bias_list[-1].counts] )
+
+			context['rawbias_level']        = '%.2f' % rawbias_level
+
+			if rawbias_level > 150 and rawbias_level < 300:
+				context['rawbias_flag'] = 'G'
+			else:
+				context['rawbias_flag'] = 'B'
+
+			####
+			#  FLAT Level
+			####
+
+			rawflat1_level  = np.array([flat_list[0].counts1,flat_list[-1].counts1])
+			rawflat2_level  = np.array([flat_list[0].counts2,flat_list[-1].counts2])
+			#context['rawflat1_level']      = '%.2f/%.2f' % (rawflat1_level[0],rawflat1_level[1])
+			#context['rawflat2_level']      = '%.2f/%.2f' % (rawflat2_level[0],rawflat2_level[1])
+
+			context['rawflat1_level']       = '%.0f' % np.mean(rawflat1_level)
+			context['rawflat2_level']       = '%.0f' % np.mean(rawflat2_level)      
 
 
-	night 			= get_object_or_404( NIGHT,calibration_night=get_session() )
-	context['cal_night']=night
+			if  rawflat1_level[0] > 10000 and rawflat1_level[0] < 50000 and \
+				rawflat1_level[1] > 10000 and rawflat1_level[1] < 50000:
+				context['rawflat1_flag'] = 'G'
+			else:
+				context['rawflat1_flag'] = 'B'
 
-	# NEW access sql database, to get list
-	# other program, e.g. watchdog writes in database and copy files.
-	bias_list           = RAW_BIAS.objects.filter( session=get_session() )
-	flat_list           = RAW_FLAT.objects.filter( session=get_session() )
-	lamp_list           = RAW_LAMP.objects.filter( session=get_session() )
-	stat_fibre1_flag    = 'G'
-	stat_fibre2_flag    = 'G'
-	raw_fibre1_flag     = None
-	raw_fibre2_flag     = None
 
-	if night.all_rawcal:
-		error_present=True
-		raw_fibre1_flag ='G'
-		raw_fibre2_flag ='G'
+			if  rawflat2_level[0] > 10000 and rawflat2_level[0] < 50000 and \
+				rawflat2_level[1] > 10000 and rawflat2_level[1] < 50000:
+				context['rawflat2_flag'] = 'G'
+			else:
+				context['rawflat2_flag'] = 'B'
 
-		####
-		#  BIAS Level
-		####
 
-		rawbias_level = np.mean( [bias_list[0].counts,bias_list[-1].counts] )
+			####
+			#  LAMP Level
+			####
 
-		context['rawbias_level']        = '%.2f' % rawbias_level
+			rawlamp1_level  = lamp_list[0].counts1
+			rawlamp2_level  = lamp_list[0].counts2
 
-		if rawbias_level > 150 and rawbias_level < 300:
-			context['rawbias_flag'] = 'G'
+			context['rawThArNe1_level']         = '%.0f' % np.mean(rawlamp1_level)
+			context['rawThArNe2_level']         = '%.0f' % np.mean(rawlamp2_level)      
+
+
+			if  rawlamp1_level > 2000 and rawlamp1_level < 50000:
+				context['rawThArNe1_flag'] = 'G'
+			else:
+				context['rawThArNe1_flag'] = 'B'
+
+
+			if  rawlamp2_level > 2000 and rawlamp2_level < 50000:
+				context['rawThArNe2_flag'] = 'G'
+			else:
+				context['rawThArNe2_flag'] = 'B'
+			errormsg='None'
+
 		else:
-			context['rawbias_flag'] = 'B'
-
-		####
-		#  FLAT Level
-		####
-
-		rawflat1_level  = np.array([flat_list[0].counts1,flat_list[-1].counts1])
-		rawflat2_level  = np.array([flat_list[0].counts2,flat_list[-1].counts2])
-		#context['rawflat1_level']      = '%.2f/%.2f' % (rawflat1_level[0],rawflat1_level[1])
-		#context['rawflat2_level']      = '%.2f/%.2f' % (rawflat2_level[0],rawflat2_level[1])
-
-		context['rawflat1_level']       = '%.0f' % np.mean(rawflat1_level)
-		context['rawflat2_level']       = '%.0f' % np.mean(rawflat2_level)      
+			error_present=False
+			raw_fibre1_flag ='W'
+			raw_fibre2_flag ='W'
+			errormsg='Not enough calibration frames available. Wait for calibration OB to finish.'      
 
 
-		if  rawflat1_level[0] > 10000 and rawflat1_level[0] < 50000 and \
-			rawflat1_level[1] > 10000 and rawflat1_level[1] < 50000:
-			context['rawflat1_flag'] = 'G'
-		else:
-			context['rawflat1_flag'] = 'B'
+		context['bias_list']        = bias_list
+		context['flat_list']        = flat_list
+		context['tharne_list']      = lamp_list
 
+		context['stat_fibre1_flag']     = stat_fibre1_flag
+		context['stat_fibre2_flag']     = stat_fibre2_flag
+		context['raw_fibre1_flag']      = raw_fibre1_flag
+		context['raw_fibre2_flag']      = raw_fibre2_flag
+		context['error_present']        = error_present
+		context['errormsg']             = errormsg
 
-		if  rawflat2_level[0] > 10000 and rawflat2_level[0] < 50000 and \
-			rawflat2_level[1] > 10000 and rawflat2_level[1] < 50000:
-			context['rawflat2_flag'] = 'G'
-		else:
-			context['rawflat2_flag'] = 'B'
+    except ObjectDoesNotExist:
+ 
+		context['error_present']        = True
+		context['errormsg']             = 'No FEROS files present!'
 
-
-		####
-		#  LAMP Level
-		####
-
-		rawlamp1_level  = lamp_list[0].counts1
-		rawlamp2_level  = lamp_list[0].counts2
-
-		context['rawThArNe1_level']         = '%.0f' % np.mean(rawlamp1_level)
-		context['rawThArNe2_level']         = '%.0f' % np.mean(rawlamp2_level)      
-
-
-		if  rawlamp1_level > 2000 and rawlamp1_level < 50000:
-			context['rawThArNe1_flag'] = 'G'
-		else:
-			context['rawThArNe1_flag'] = 'B'
-
-
-		if  rawlamp2_level > 2000 and rawlamp2_level < 50000:
-			context['rawThArNe2_flag'] = 'G'
-		else:
-			context['rawThArNe2_flag'] = 'B'
-		errormsg='None'
-
-	else:
-		error_present=False
-		raw_fibre1_flag ='W'
-		raw_fibre2_flag ='W'
-		errormsg='Not enough calibration frames available. Wait for calibration OB to finish.'      
-
-
-	context['bias_list']        = bias_list
-	context['flat_list']        = flat_list
-	context['tharne_list']      = lamp_list
-
-	context['stat_fibre1_flag']     = stat_fibre1_flag
-	context['stat_fibre2_flag']     = stat_fibre2_flag
-	context['raw_fibre1_flag']      = raw_fibre1_flag
-	context['raw_fibre2_flag']      = raw_fibre2_flag
-	context['error_present']        = error_present
-	context['errormsg']             = errormsg
 
 	return context
 

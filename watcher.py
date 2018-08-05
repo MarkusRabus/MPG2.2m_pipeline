@@ -27,7 +27,7 @@ class Watcher:
         self.observer.start()
         try:
             while True:
-                time.sleep(60)
+                time.sleep(1)
         except:
             self.observer.stop()
             print "Error"
@@ -47,9 +47,9 @@ class Handler(FileSystemEventHandler):
             print "Received created event - %s" % event.src_path
             
             trigger_copy(event.src_path)
-            time.sleep(60)
+            #time.sleep(60)
             update_DB()
-            time.sleep(30)
+            #time.sleep(30)
             trigger_ceres()
 
 
