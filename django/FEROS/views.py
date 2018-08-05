@@ -15,7 +15,6 @@ from math import floor
 
 import mpld3
 import matplotlib
-matplotlib.use('Agg') 
 from matplotlib import rc
 import matplotlib.pyplot as plt
 
@@ -156,7 +155,7 @@ def index_context():
 
 	except ObjectDoesNotExist:
 
-		night =  NIGHT(calibration_night=Time(1721426.0,format='jd', scale='utc').datetime,all_rawcal = False, masterbias = False, masterflat = False, wavesol_flag = False)
+		night =  NIGHT(calibration_night=Time(2415020.5,format='jd', scale='utc').datetime,all_rawcal = False, masterbias = False, masterflat = False, wavesol_flag = False)
 		context['cal_night']=night
 		context['error_present']        = True
 		context['errormsg']             = 'No FEROS files present!'
