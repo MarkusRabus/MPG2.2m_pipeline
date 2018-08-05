@@ -15,6 +15,7 @@ from math import floor
 
 import mpld3
 import matplotlib
+matplotlib.use('Agg') 
 from matplotlib import rc
 import matplotlib.pyplot as plt
 
