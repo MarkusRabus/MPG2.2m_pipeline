@@ -40,6 +40,9 @@ RUN apt-get install -y ca-certificates \
     libc6-dev \
     libbz2-dev
 
+RUN mkdir /srv/logs/ && mkdir /code/
+WORKDIR /code    
+
 RUN wget https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tgz && \
     tar -xzf Python-2.7.13.tgz -C /usr/src  && \
     cd /usr/src/Python-2.7.13 && \
@@ -63,19 +66,13 @@ RUN apt-get install --no-install-recommends -y r-base
 RUN apt-get install --no-install-recommends -y libffi-dev libssl-dev
 
 # Need to do this outside of requirements.txt, needed for packages in requirements.txt
-RUN pip install --no-cache-dir numpy
-RUN pip install --no-cache-dir scipy
-RUN pip install --no-cache-dir matplotlib
-
-RUN mkdir /srv/logs/
-
-RUN mkdir /code/
-RUN mkdir /code/static/
-WORKDIR /code
+RUN pip install --no-cache-dir numpy && \
+    pip install --no-cache-dir scipy && \
+    pip install --no-cache-dir matplotlib
 
 RUN git clone git://github.com/MarkusRabus/MPG2.2m_pipeline.git
 
-RUN pip install --no-cache-dir -r MPG2.2m_pipeline/requirements.txt
+RUN pip install --no-cache-dir -r /MPG2.2m_pipeline/requirements.txt
 
 RUN git clone git://github.com/statsmodels/statsmodels.git
 RUN cd statsmodels && \
@@ -84,5 +81,12 @@ RUN cd statsmodels && \
 RUN apt-get install --no-install-recommends -y python-dev
 RUN rm -rf /var/lib/apt/lists/*
 
-RUN ["chmod", "+x", "/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
-ENTRYPOINT ["/code/MPG2.2m_pipeline/docker-entrypoint.sh"]
+WORKDIR /MPG2.2m_pipeline
+
+RUN ["chmod", "+x", "/MPG2.2m_pipeline/docker-entrypoint.sh"]
+ENTRYPOINT ["/MPG2.2m_pipeline/docker-entrypoint.sh"]
+
+
+
+
+
