@@ -3,7 +3,7 @@
 #cd MPG2.2m_pipeline/ceres && \
 #python install.py
 echo Starting WATCHDOG !!!!!!!!!!!
-nohub python watcher.py &
+nohup python watcher.py &
 
 echo '---------------------------------'
 

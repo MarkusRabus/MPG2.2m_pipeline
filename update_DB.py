@@ -1,6 +1,6 @@
 from astropy.io import fits as pf
 import glob
-
+import subprocess
 import os
 import sys
 import django
@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 nightfmt="%Y-%m-%d"
-data_path = os.environ['FEROS_DATA_PATH']
+copy2root = os.environ['FEROS_DATA_PATH']
 sys.path.append(os.environ['DJANGO_PROJECT_PATH'])
 from django.apps import apps
 from django.conf import settings
@@ -84,6 +84,13 @@ def trigger_copy(src_path):
 
                 cmd='rsync -avz %s %s' %(  src_path, copy_path )
                 status = subprocess.call(cmd, shell=True)
+
+		        print '---------------------------------------------------------------'
+		        print 'Copy file are:'
+		        print src_path
+		        print copy_path
+		        print '---------------------------------------------------------------'
+
         else:
             print 'NOT FEROS!!!!'
 
