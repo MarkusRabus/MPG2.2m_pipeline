@@ -5,7 +5,7 @@
 echo Starting WATCHDOG !!!!!!!!!!!
 nohup python watcher.py &
 
-cd MPG2.2m_pipeline/django
+cd django
 python manage.py migrate                  # Apply database migrations
 python manage.py collectstatic --noinput  # Collect static files
 

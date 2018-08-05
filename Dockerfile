@@ -85,8 +85,8 @@ RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /MPG2.2m_pipeline
 
-RUN ["chmod", "+x", "/MPG2.2m_pipeline/docker-entrypoint.sh"]
-ENTRYPOINT ["/MPG2.2m_pipeline/docker-entrypoint.sh"]
+RUN ["chmod", "+x", "docker-entrypoint.sh"]
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 
 
