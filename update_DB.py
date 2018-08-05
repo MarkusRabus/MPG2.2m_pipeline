@@ -5,7 +5,7 @@ import os
 import sys
 import django
 from django.core.exceptions import ObjectDoesNotExist
-from ferospipe import ferospipe
+#from ferospipe import ferospipe
 
 
 nightfmt="%Y-%m-%d"
