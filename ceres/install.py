@@ -39,15 +39,15 @@ def CheckLibraries():
       print '             To install it, go to: http://www.scipy.org/\n\n'
       sys.exit(1)
     print "     > Scipy is ok!"
-    try:
-      import pyfits
-    except ImportError:
-      print "     ----------------------------------------------------------"
-      print '     ERROR: '+p_name+' will not be installed in your system because'
-      print '            pyfits is not installed in your system.'
-      print '            To install it, go to: http://www.stsci.edu/institute/software_hardware/pyfits \n\n'
-      sys.exit(1)
-    print "     > Pyfits is ok!"
+    #try:
+    #  import pyfits
+    #except ImportError:
+    #  print "     ----------------------------------------------------------"
+    #  print '     ERROR: '+p_name+' will not be installed in your system because'
+    #  print '            pyfits is not installed in your system.'
+    #  print '            To install it, go to: http://www.stsci.edu/institute/software_hardware/pyfits \n\n'
+    #  sys.exit(1)
+    #print "     > Pyfits is ok!"
 def getDirs(foldername):
     return os.walk(foldername).next()[1]
 
@@ -68,9 +68,6 @@ def Build(directory):
     # We obtain al files and folders of the current directory...
 
     files_and_folders = glob.glob(directory+'/*')
-
-    print 'BUILD:   ',files_and_folders
-
     CFileFound = False
     SetupFileFound = False
     # ...and we check each folder or file:
@@ -156,9 +153,6 @@ for dire in dirs:
 dirs = ndirs
 for directory in dirs:
     # To each directory, we apply the build function:
-
-    print 'DIRECTORY:   ',directory
-
     if(directory == 'utils/SSEphem'):
        print "     > Installing SSEphem...\n \n"
        os.chdir('utils/SSEphem/SOFA')
