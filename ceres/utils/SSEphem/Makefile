@@ -3,10 +3,10 @@
 # JPL DE403 ephemerides.
 
 #Update this line!
-PY_PREFIX := /home/mrabus/anaconda2/envs/Anaconda/
+PY_PREFIX := /usr/local/
 
 #You might also need to update these other three lines
-SWIG = swig
+SWIG = /usr/bin/swig
 INUM = $(PY_PREFIX)/lib/python2.7/site-packages/numpy/core/include/numpy/
 PY   = $(PY_PREFIX)/include/python2.7/
 
