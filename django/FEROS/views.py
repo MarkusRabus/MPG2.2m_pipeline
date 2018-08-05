@@ -13,9 +13,9 @@ from astropy.time import Time
 from datetime import datetime
 from math import floor
 
-import mpld3
 import matplotlib
 matplotlib.use('Agg') 
+import mpld3
 from matplotlib import rc
 import matplotlib.pyplot as plt
 

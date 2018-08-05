@@ -10,6 +10,7 @@ ENV PYTHONPATH "${PYTHONPATH}:/MPG2.2m_pipeline/ceres/feros/"
 ENV FEROS_DATA_PATH='/data/'
 ENV DIRECTORY_TO_WATCH='/original_data/'
 ENV DJANGO_PROJECT_PATH='/MPG2.2m_pipeline/django/'
+#ENV DISPLAY='localhost:0'
 
 # ensure local python is preferred over distribution python
 ENV PATH /usr/local/bin:$PATH
