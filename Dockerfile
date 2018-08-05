@@ -51,7 +51,7 @@ WORKDIR /code
 RUN wget https://www.python.org/ftp/python/2.7.13/Python-2.7.13.tgz && \
     tar -xzf Python-2.7.13.tgz -C /usr/src  && \
     cd /usr/src/Python-2.7.13 && \
-    ./configure && \
+    ./configure --with-shared && \
     make && \
     make altinstall
 
@@ -81,7 +81,7 @@ RUN git clone git://github.com/statsmodels/statsmodels.git
 RUN cd statsmodels && \
     python setup.py install
 
-RUN apt-get install --no-install-recommends -y python-dev
+#RUN apt-get install --no-install-recommends -y python-dev
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /MPG2.2m_pipeline

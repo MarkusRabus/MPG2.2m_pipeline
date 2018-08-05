@@ -3,7 +3,9 @@
 #cd MPG2.2m_pipeline/ceres && \
 #python install.py
 echo Starting WATCHDOG !!!!!!!!!!!
-nohup python watcher.py &
+python watcher.py &
+
+echo '---------------------------------'
 
 cd django
 python manage.py migrate                  # Apply database migrations
