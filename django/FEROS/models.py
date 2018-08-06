@@ -22,11 +22,11 @@ lamps =(	('FLAT' 	, 'LAMP2'),
 			('ThAr+Ne'	, 'LAMP3'),
 		)
 
-HIERARCH_ESO_TPL_NAME = (	('bias' 	, 'FEROS bias'),
-							('flat' 	, 'FEROS flatfield'),
-							('lamp'  	, 'FEROS ThAr+Ne wavelength calibration'),
-							('object-cal' 	, 'FEROS obs.object-cal')
-						)
+HIERARCH_ESO_TPL_NAME = {	'bias' 			: 'FEROS bias',
+							'flat' 			: 'FEROS flatfield',
+							'lamp'  		: 'FEROS ThAr+Ne wavelength calibration',
+							'object-cal' 	: 'FEROS obs.object-cal'
+						}
 
 
 
