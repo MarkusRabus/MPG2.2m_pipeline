@@ -58,9 +58,9 @@ while True:
 
 
             try:
-                night  = NIGHT.objects.get( calibration_night=current_session )
+                night  = NIGHT.objects.get( calibration_night=get_session() )
             except ObjectDoesNotExist:
-                night =  NIGHT(calibration_night=current_session ,all_rawcal = False, masterbias = False, masterflat = False, wavesol_flag = False)
+                night =  NIGHT(calibration_night=get_session() ,all_rawcal = False, masterbias = False, masterflat = False, wavesol_flag = False)
                 night.save()
 
             try:
