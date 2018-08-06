@@ -236,9 +236,19 @@ def plotcal(request):
 
 	if request.method == 'POST':
 		print request.POST['Images    ']
-		imdata = get_biasdata(cal_night,request.POST['Images    '])
+		imagename = request.POST['Images    ']
+
+		if imagename == 'MasterBias':
+			reddir=os.path.dirname(data_path+night.strftime(nightfmt)+'_red/')
+			imdata =  pf.getdata(reddir+'/MasterBias.fits')
+		else:
+			rawdir=os.path.dirname(data_path+night.strftime(nightfmt)+'/')
+			imdata =  pf.getdata(rawdir+'/'+imagename+'.fits')
+
 	else:
-		imdata = get_biasdata(cal_night,biaslist[0][1])
+		imagename = biaslist[0][1]
+		rawdir=os.path.dirname(data_path+night.strftime(nightfmt)+'/')
+		imdata =  pf.getdata(rawdir+'/'+imagename+'.fits')		
 
 	xpix = np.arange(imdata.shape[1])
 
@@ -364,6 +374,7 @@ def longtermrv(request):
 	mpl_figure1.clf()
 	ax1 = mpl_figure1.add_subplot(1, 1, 1)
 
+	'''
 	RVstd = RV_std.objects.filter(std_name='tauCeti')[0]
 	
 	obstimes    = np.array(RVstd.rvs_set.values_list('dateobs')).flatten()
@@ -376,11 +387,15 @@ def longtermrv(request):
 	#ax.set_ylim(min_flux,max_flux)
 	ax1.set_ylabel(r'Radial Velocity')
 	ax1.set_xlabel(r'Time') 
+	'''
 
 	fig_rvstd_tauCeti = mpld3.fig_to_html(mpl_figure1)
 
 	context = { 'figure_rvstd_tauCeti' : fig_rvstd_tauCeti,
 			}
+
+	context['errormsg']             = 'Not implemented yet !!!'
+
 
 	return HttpResponse(template.render(context))
 
