@@ -2,7 +2,7 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import os
-from update_DB import update_DB, trigger_copy, trigger_ceres, trigger_folder
+from update_DB import update_DB, trigger_copy, trigger_ceres
 
 
 
@@ -34,21 +34,14 @@ class Handler(FileSystemEventHandler):
     @staticmethod
     def on_any_event(event):
 
-        print '!!!!!!!!!!!!!!!!!!!!!!!!!!\n'
-
-        print 'EVENT:   ',event
-
-        print '!!!!!!!!!!!!!!!!!!!!!!!!!!\n'
-
         if event.event_type == 'created':
             print "FOLDER event received created event - %s" % event.src_path
             
             trigger_copy(event.src_path)
-            #time.sleep(60)
-            #update_DB()
-            #time.sleep(30)
-            #trigger_ceres()
-
+            time.sleep(20)
+            update_DB()
+            time.sleep(20)
+            trigger_ceres()
 
 if __name__ == '__main__':
 
