@@ -124,8 +124,10 @@ class NIGHT(models.Model):
 class RAW_IMAGE_Manager(models.Manager):
 	def create_raw(self,path):
 		hdr 			= pf.getheader(path)
+		#Search for corresponding night:
+		night 			= NIGHT.objects.get(calibration_night=get_session())		
 
-		rawim 			= self.create(imagename=path.split('/')[-1].rstrip('.fits'))
+		rawim 			= self.create(imagename=path.split('/')[-1].rstrip('.fits'), session=night)
 		rawim.path 		= path.rstrip(path.split('/')[-1])
 		rawim.exptime 	= hdr['EXPTIME']
 		'''
@@ -137,13 +139,6 @@ class RAW_IMAGE_Manager(models.Manager):
 		rawim.binning 	= '%i x %i' % (hdr['CDELT1'],hdr['CDELT2'])
 		rawim.obstime 	= Time(hdr['DATE-OBS'], format='isot', scale='utc').datetime
 
-		#Search for corresponding night:
-		night 			= NIGHT.objects.get(calibration_night=get_session())
-		rawim.session 	= night
-
-
-		rawim.session 	= Time( floor( Time(hdr['DATE-OBS'], format='isot', scale='utc').jd),
-								format='jd').datetime.date()
 
 		if hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['bias']:
 			rawim.imtype = 'bias'
@@ -185,13 +180,13 @@ class RAW_IMAGE(models.Model):
 	imagename       = models.CharField('Image name', editable=False,
 						primary_key=True, unique=True, max_length=250)
 	path            = models.FilePathField('Fits file path', editable=False,
-						max_length=250)
+						max_length=250,null=True)
 	exptime         = models.FloatField('Exposure time',editable=False,default=0.0)
 	obstime         = models.DateTimeField('Obs. date & time',editable=False,null=True)
 	#obsmode         = models.ForeignKey(OBSMODE, on_delete=models.CASCADE)
-	binning         = models.CharField('Binning', editable=False, max_length=3)
+	binning         = models.CharField('Binning', editable=False, max_length=3,null=True)
 	session			= models.ForeignKey(NIGHT, on_delete=models.CASCADE)
-	imtype         	= models.CharField('Image type [bias, flat, wave, lamp, ThAr, object-cal, undefined]', editable=False, max_length=4)
+	imtype         	= models.CharField('Image type [bias, flat, wave, lamp, ThAr, object-cal, undefined]', editable=False, max_length=4,null=True)
 
 	objects = RAW_IMAGE_Manager()
 
@@ -223,7 +218,10 @@ class WAVESOL_Manager(models.Manager):
 
 	def create_wavesol(self,path):
 
-		wavesol 			= self.create(imagename=path.split('/')[-1].rstrip('.wavsolpars.pkl'))
+		#Search for corresponding night:
+		night 			= NIGHT.objects.get(calibration_night=get_session())		
+
+		wavesol 			= self.create( imagename=path.split('/')[-1].rstrip('.wavsolpars.pkl'), session=night )
 		wavesol.path 		= path.rstrip(path.split('/')[-1])
 		pdict 				= pickle.load(open(path,'r'))
 
@@ -232,9 +230,6 @@ class WAVESOL_Manager(models.Manager):
 		wavesol.N_l 		= len(pdict['G_wav_co'])
 		wavesol.precision 	= pdict['rms_ms_co']/np.sqrt( len(pdict['G_wav_co']) )
 
-		#Search for corresponding night:
-		night 			= NIGHT.objects.get(calibration_night=get_session())
-		wavesol.session 	= night
 		return wavesol
 
 class WAVESOL(models.Model):
@@ -242,7 +237,7 @@ class WAVESOL(models.Model):
 	imagename       = models.CharField('Image name', editable=False,
 						primary_key=True, unique=True, max_length=250)
 	path            = models.FilePathField('Pickle file path', editable=False,
-						max_length=250)
+						max_length=250,null=True)
 	rms         	= models.FloatField('Final RMS',editable=False,default=0.0)
 	obstime         = models.DateTimeField('Obs. date & time',editable=False,null=True)
 	N_l       		= models.FloatField('Number of lines',editable=False,default=0.0)
