@@ -73,19 +73,19 @@ while True:
                 raw_im  = RAW_IMAGE.objects.get( imagename=imagename )
             except ObjectDoesNotExist:
 
-                hdr=pf.getheader(ele)
+                hdr=pf.getheader(imagename)
 
                 if hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['bias']:
-                    rawobj = RAW_BIAS.objects.create_raw(ele)
+                    rawobj = RAW_BIAS.objects.create_raw(imagename)
                     rawob.save()
                 elif hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['flat']:
-                    rawobj = RAW_FLAT.objects.create_raw(ele)
+                    rawobj = RAW_FLAT.objects.create_raw(imagename)
                     rawobj.save()
                 elif hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['lamp']:
-                    rawobj = RAW_LAMP.objects.create_raw(ele)
+                    rawobj = RAW_LAMP.objects.create_raw(imagename)
                     rawobj.save()
                 else:
-                    rawobj = RAW_IMAGE.objects.create_raw(ele)
+                    rawobj = RAW_IMAGE.objects.create_raw(imagename)
                     rawobj.save()
 
 
@@ -116,7 +116,7 @@ while True:
                     try:
                         wavesolobj  = WAVESOL.objects.get( imagename=wavesol_imagename )
                     except ObjectDoesNotExist:
-                        wavesolobj = WAVESOL.objects.create_wavesol(ele)
+                        wavesolobj = WAVESOL.objects.create_wavesol(wavesol_imagename)
 
     time.sleep(90)
 
