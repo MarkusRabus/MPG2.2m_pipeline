@@ -69,7 +69,7 @@ while True:
 
                 if hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['bias']:
                     rawobj = RAW_BIAS.objects.create_raw(image)
-                    rawob.save()
+                    rawobj.save()
                 elif hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['flat']:
                     rawobj = RAW_FLAT.objects.create_raw(image)
                     rawobj.save()
