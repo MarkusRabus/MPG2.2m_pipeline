@@ -57,8 +57,6 @@ def index_context():
 
 		night  = NIGHT.objects.get( calibration_night=get_session() )
 
-		print night
-
 		context['cal_night']=night
 
 		# NEW access sql database, to get list
@@ -89,7 +87,9 @@ def index_context():
 
 		if len(bias_list) > 1:
 
-			rawbias_level = np.median( bias_list[0].counts,bias_list[-1].counts] )
+			rawbias_level = np.median( bias_list[0].counts )
+
+			print bias_list
 
 			context['rawbias_level']        = '%.2f' % rawbias_level
 
@@ -106,8 +106,8 @@ def index_context():
 
 		if len(flat_list) > 1:
 
-			rawflat1_level  = np.array([flat_list[0].counts1,flat_list[-1].counts1])
-			rawflat2_level  = np.array([flat_list[0].counts2,flat_list[-1].counts2])
+			rawflat1_level  = np.array( flat_list[0].counts1 )
+			rawflat2_level  = np.array( flat_list[0].counts2 )
 			#context['rawflat1_level']      = '%.2f/%.2f' % (rawflat1_level[0],rawflat1_level[1])
 			#context['rawflat2_level']      = '%.2f/%.2f' % (rawflat2_level[0],rawflat2_level[1])
 
