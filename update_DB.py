@@ -45,22 +45,6 @@ def trigger_ceres():
     	print 'NIGHT does not exist'
 
 
-def trigger_folder(src_path):
-
-    current_session = get_session().strftime(nightfmt)
-
-    if current_session == src_path.split('/')[-1]:
-        copy_path       = copy2root+get_session().strftime(nightfmt)+'/RAW/'
-        if not os.path.exists(copy_path):
-            os.makedirs(copy_path)
-    else:
-
-        print '---------------------------------------------------------------'
-        print 'Session and Remote night folder are different !!!!'
-        print get_session().strftime(nightfmt)
-        print src_path.split('/')[-2]
-        print '---------------------------------------------------------------'
-
 
 def trigger_copy(src_path):
 
@@ -85,11 +69,11 @@ def trigger_copy(src_path):
                 cmd='rsync -avz %s %s' %(  src_path, copy_path )
                 status = subprocess.call(cmd, shell=True)
 
-		        print '---------------------------------------------------------------'
-		        print 'Copy file are:'
-		        print src_path
-		        print copy_path
-		        print '---------------------------------------------------------------'
+                print '---------------------------------------------------------------'
+                print 'Copy file are:'
+                print src_path
+                print copy_path
+                print '---------------------------------------------------------------'
 
         else:
             print 'NOT FEROS!!!!'
