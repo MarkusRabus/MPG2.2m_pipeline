@@ -25,12 +25,6 @@ normal_obsmode = {  'HIERARCH ESO DET READ CLOCK'   : 'R 225Kps Low Gain',
                     'CDELT1'                        : 1,
                     'CDELT2'                        : 1, }
 
-HIERARCH_ESO_TPL_NAME = [   'FEROS bias',
-                            'FEROS flatfield',
-                            'FEROS ThAr+Ne wavelength calibration',
-                            'FEROS obs.object-cal',
-                        ]
-
 
 while True:
 
