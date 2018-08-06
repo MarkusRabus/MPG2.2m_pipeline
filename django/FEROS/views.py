@@ -250,7 +250,7 @@ def plotcal(request):
 			imagename = biaslist[0][1]
 			rawdir=os.path.dirname(data_path+night.strftime(nightfmt)+'/')
 			imdata =  pf.getdata(rawdir+'/'+imagename+'.fits')
-		else
+		else:
 			context['errormsg'] = 'No BIAS image present !!!!!'
 			imdata = np.zeros((4000,2148))
 

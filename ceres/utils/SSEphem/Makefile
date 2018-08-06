@@ -17,7 +17,6 @@ CPP = g++ -fPIC
 
 POSTSTEP =
 ifeq ($(shell uname),Darwin)
-    # XXX disgusting
     POSTSTEP = install_name_tool -change libpython2.7.dylib $(PY_PREFIX)/lib/libpython2.7.dylib _jplephem.so
 endif
 
