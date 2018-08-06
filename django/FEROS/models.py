@@ -8,7 +8,8 @@ from math import floor
 from datetime import datetime
 
 from astropy.modeling.fitting import LevMarLSQFitter
-from astropy.modeling.models import custom_model, models
+from astropy.modeling import models
+from astropy.modeling.models import custom_model
 
 import os
 
