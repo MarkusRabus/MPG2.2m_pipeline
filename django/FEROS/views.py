@@ -87,9 +87,9 @@ def index_context():
 		#  BIAS Level
 		####
 
-		if len(bias_list) > 1:
+		if len(bias_list) > 0:
 
-			rawbias_level = np.median( [bias_list[0].counts,bias_list[-1].counts] )
+			rawbias_level = np.median( np.array(bias_list.counts) )
 
 			context['rawbias_level']        = '%.2f' % rawbias_level
 
@@ -104,10 +104,10 @@ def index_context():
 		#  FLAT Level
 		####
 
-		if len(flat_list) > 1:
+		if len(flat_list) > 0:
 
-			rawflat1_level  = np.array([flat_list[0].counts1,flat_list[-1].counts1])
-			rawflat2_level  = np.array([flat_list[0].counts2,flat_list[-1].counts2])
+			rawflat1_level  = np.array(flat_list.counts1)
+			rawflat2_level  = np.array(flat_list.counts2)
 			#context['rawflat1_level']      = '%.2f/%.2f' % (rawflat1_level[0],rawflat1_level[1])
 			#context['rawflat2_level']      = '%.2f/%.2f' % (rawflat2_level[0],rawflat2_level[1])
 
@@ -139,8 +139,8 @@ def index_context():
 
 		if len(lamp_list) > 0:
 
-			rawlamp1_level  = lamp_list[0].counts1
-			rawlamp2_level  = lamp_list[0].counts2
+			rawlamp1_level  = np.array( lamp_list.counts1 )
+			rawlamp2_level  = np.array( lamp_list.counts2 )
 
 			context['rawThArNe1_level']         = '%.0f' % np.mean(rawlamp1_level)
 			context['rawThArNe2_level']         = '%.0f' % np.mean(rawlamp2_level)      

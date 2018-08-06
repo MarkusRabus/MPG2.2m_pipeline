@@ -137,7 +137,7 @@ class RAW_IMAGE_Manager(models.Manager):
 		obsmode = obsmode.filter(cdelt2 = hdr['CDELT2'])
 		rawim.obsmode 	= obsmode[0]
 		'''
-		rawim.binning 	= '%i x %i' % (hdr['CDELT1'],hdr['CDELT2'])
+		rawim.binning 	= '%0.1f x %0.1f' % (hdr['CDELT1'],hdr['CDELT2'])
 		rawim.obstime 	= Time(hdr['DATE-OBS'], format='isot', scale='utc').datetime
 
 
