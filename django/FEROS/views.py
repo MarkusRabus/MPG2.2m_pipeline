@@ -429,7 +429,7 @@ def update_DB(request):
 		if normal_obsmode['HIERARCH ESO DET READ CLOCK'] == hdr['HIERARCH ESO DET READ CLOCK'] and \
 			normal_obsmode['CDELT1'] == hdr['CDELT1'] and \
 			normal_obsmode['CDELT2'] == hdr['CDELT2'] and \
-			hdr['HIERARCH ESO TPL NAME'] in HIERARCH_ESO_TPL_NAME:
+			hdr['HIERARCH ESO TPL NAME'] in [HIERARCH_ESO_TPL_NAME['bias'],HIERARCH_ESO_TPL_NAME['flat'],HIERARCH_ESO_TPL_NAME['lamp']]:
 
 			cmd='rsync -avz %s %s' %(  image, copy_path+imagename )
 			status = subprocess.call(cmd, shell=True)
