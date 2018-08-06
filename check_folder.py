@@ -22,8 +22,8 @@ from FEROS.models import *
 
 
 normal_obsmode = {  'HIERARCH ESO DET READ CLOCK'   : 'R 225Kps Low Gain',
-                    'CDELT1'                        : 1,
-                    'CDELT2'                        : 1, }
+                    'CDELT1'                        : 1.0,
+                    'CDELT2'                        : 1.0, }
 
 
 while True:
