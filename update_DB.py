@@ -52,7 +52,7 @@ def trigger_copy(src_path):
     if current_session == src_path.split('/')[-2]:
 
         filename        = src_path.split('/')[-1]
-        copy_path       = copy2root+get_session().strftime(nightfmt)+'/RAW/'
+        copy_path       = copy2root+current_session+'/RAW/'
 
         if not os.path.exists(copy_path):
             os.makedirs(copy_path)

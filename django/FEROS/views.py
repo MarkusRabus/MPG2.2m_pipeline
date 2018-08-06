@@ -246,9 +246,13 @@ def plotcal(request):
 			imdata =  pf.getdata(rawdir+'/'+imagename+'.fits')
 
 	else:
-		imagename = biaslist[0][1]
-		rawdir=os.path.dirname(data_path+night.strftime(nightfmt)+'/')
-		imdata =  pf.getdata(rawdir+'/'+imagename+'.fits')		
+		if len(biaslist) > 0:
+			imagename = biaslist[0][1]
+			rawdir=os.path.dirname(data_path+night.strftime(nightfmt)+'/')
+			imdata =  pf.getdata(rawdir+'/'+imagename+'.fits')
+		else
+			context['errormsg'] = 'No BIAS image present !!!!!'
+			imdata = np.zeros((4000,2148))
 
 	xpix = np.arange(imdata.shape[1])
 
@@ -398,4 +402,107 @@ def longtermrv(request):
 
 
 	return HttpResponse(template.render(context))
+
+
+def update_DB(request):
+
+	import glob,os
+
+	context = index_context()
+	template = loader.get_template('FEROS/index.html')
+
+
+	current_session = get_session().strftime(nightfmt)
+	src_path 		= os.environ['DIRECTORY_TO_WATCH'] + current_session
+	copy_path       = os.environ['FEROS_DATA_PATH']+current_session+'/RAW/'
+
+	if not os.path.exists(copy_path):
+		os.makedirs(copy_path)
+
+	allimages = glob.glob(src_path+'/FEROS*.fits')
+
+	for image in allimages:
+
+		hdr = pf.getheader(image)
+		imagename = image.split('/')[-1]
+
+		if normal_obsmode['HIERARCH ESO DET READ CLOCK'] == hdr['HIERARCH ESO DET READ CLOCK'] and \
+			normal_obsmode['CDELT1'] == hdr['CDELT1'] and \
+			normal_obsmode['CDELT2'] == hdr['CDELT2'] and \
+			hdr['HIERARCH ESO TPL NAME'] in HIERARCH_ESO_TPL_NAME:
+
+			cmd='rsync -avz %s %s' %(  image, copy_path+imagename )
+			status = subprocess.call(cmd, shell=True)
+
+			print '---------------------------------------------------------------'
+			print 'Copy file are:'
+			print image
+			print copy_path+image.split('/')[-1]
+			print '---------------------------------------------------------------'
+
+  
+			try:
+				night  = NIGHT.objects.get( calibration_night=current_session )
+			except ObjectDoesNotExist:
+				night =  NIGHT(calibration_night=current_session ,all_rawcal = False, masterbias = False, masterflat = False, wavesol_flag = False)
+				night.save()
+
+			try:
+				raw_im  = RAW_IMAGE.objects.get( imagename=imagename )
+			except ObjectDoesNotExist:
+
+				hdr=pf.getheader(ele)
+
+				if hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['bias']:
+					rawobj = RAW_BIAS.objects.create_raw(ele)
+					rawob.save()
+				elif hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['flat']:
+					rawobj = RAW_FLAT.objects.create_raw(ele)
+					rawobj.save()
+				elif hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['lamp']:
+					rawobj = RAW_LAMP.objects.create_raw(ele)
+					rawobj.save()
+				else:
+					rawobj = RAW_IMAGE.objects.create_raw(ele)
+					rawobj.save()
+
+
+			# check if all calibrations 
+			bias_list 		= RAW_BIAS.objects.filter( session=current_session )
+			flat_list 		= RAW_FLAT.objects.filter( session=current_session )
+			lamp_list 		= RAW_LAMP.objects.filter( session=current_session )
+
+			if  len('bias_list') >= 5 and \
+				len('flat_list') >= 10 and \
+				len('lamp_list') >= 6:
+
+				night.all_rawcal = True
+
+				reddir=os.path.dirname(os.environ['FEROS_DATA_PATH']+current_session+'/RED/')
+
+				if os.path.isfile(reddir+'/MasterBias.fits'):
+					night.masterbias = True
+				if os.path.isfile(reddir+'/Flat.fits'):
+					night.masterflat = True
+
+				all_wavesol = sorted(glob.glob(reddir+'/*.wavsolpars.pkl'))
+
+				for ele in all_wavesol:
+
+					wavesol_imagename=ele.split('/')[-1].rstrip('.fits')
+
+					try:
+						wavesolobj  = WAVESOL.objects.get( imagename=wavesol_imagename )
+					except ObjectDoesNotExist:
+						wavesolobj = WAVESOL.objects.create_wavesol(ele)
+
+
+	return HttpResponse(template.render(context))
+
+
+
+
+
+
+
 

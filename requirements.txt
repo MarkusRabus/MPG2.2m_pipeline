@@ -2,7 +2,6 @@ astropy
 pandas
 pyfits
 pyephem==3.7.6.0
-watchdog
 cython
 django
 django-tables2

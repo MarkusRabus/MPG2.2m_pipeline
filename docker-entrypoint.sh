@@ -2,8 +2,8 @@
 
 #cd MPG2.2m_pipeline/ceres && \
 #python install.py
-echo Starting WATCHDOG !!!!!!!!!!!
-nohup python watcher.py &
+echo Starting FOLDER CHECK !!!!!!!!!!!
+nohup python check_folder.py &
 
 echo '---------------------------------'
 
