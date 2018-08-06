@@ -64,20 +64,20 @@ while True:
                 night.save()
 
             try:
-                raw_im  = RAW_IMAGE.objects.get( imagename=imagename )
+                raw_im  = RAW_IMAGE.objects.get( imagename=imagename.rstrip('.fits') )
             except ObjectDoesNotExist:
 
                 if hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['bias']:
-                    rawobj = RAW_BIAS.objects.create_raw(imagename)
+                    rawobj = RAW_BIAS.objects.create_raw(image)
                     rawob.save()
                 elif hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['flat']:
-                    rawobj = RAW_FLAT.objects.create_raw(imagename)
+                    rawobj = RAW_FLAT.objects.create_raw(image)
                     rawobj.save()
                 elif hdr['HIERARCH ESO TPL NAME'] == HIERARCH_ESO_TPL_NAME['lamp']:
-                    rawobj = RAW_LAMP.objects.create_raw(imagename)
+                    rawobj = RAW_LAMP.objects.create_raw(image)
                     rawobj.save()
                 else:
-                    rawobj = RAW_IMAGE.objects.create_raw(imagename)
+                    rawobj = RAW_IMAGE.objects.create_raw(image)
                     rawobj.save()
 
 
