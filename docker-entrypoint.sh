@@ -5,6 +5,8 @@
 echo Starting FOLDER CHECK !!!!!!!!!!!
 nohup python check_folder.py &
 
+tail -n 0 -f nohup.out &
+
 echo '---------------------------------'
 
 cd django
