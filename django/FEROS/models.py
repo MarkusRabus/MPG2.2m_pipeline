@@ -8,7 +8,7 @@ from math import floor
 from datetime import datetime
 
 from astropy.modeling.fitting import LevMarLSQFitter
-from astropy.modeling import models
+from astropy.modeling import models as gpmodel
 from astropy.modeling.models import custom_model
 
 import os
@@ -39,11 +39,11 @@ def model_gaussian2(x, 	amp1a = 15000, amp1b = 15000 , g1a_mean = 20., sigma1=1.
 	g1b_mean = g1a_mean + 5
 	g2b_mean = g2a_mean + 5
 
-	g1a = models.Gaussian1D(amp1a, g1a_mean, sigma1)
-	g1b = models.Gaussian1D(amp1b, g1b_mean, sigma1)
+	g1a = gpmodel.Gaussian1D(amp1a, g1a_mean, sigma1)
+	g1b = gpmodel.Gaussian1D(amp1b, g1b_mean, sigma1)
 
-	g2a = models.Gaussian1D(amp2a, g2a_mean, sigma2)
-	g2b = models.Gaussian1D(amp2b, g2b_mean, sigma2)
+	g2a = gpmodel.Gaussian1D(amp2a, g2a_mean, sigma2)
+	g2b = gpmodel.Gaussian1D(amp2b, g2b_mean, sigma2)
 
 	return  g1a(x) + g1b(x) + g2a(x) + g2b(x) + offset
 

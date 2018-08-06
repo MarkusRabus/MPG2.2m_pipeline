@@ -56,6 +56,9 @@ def index_context():
 	try:
 
 		night  = NIGHT.objects.get( calibration_night=get_session() )
+
+		print night
+
 		context['cal_night']=night
 
 		# NEW access sql database, to get list
@@ -72,12 +75,21 @@ def index_context():
 			error_present=True
 			raw_fibre1_flag ='G'
 			raw_fibre2_flag ='G'
+			errormsg='None'
 
-			####
-			#  BIAS Level
-			####
+		else:
+			error_present=False
+			raw_fibre1_flag ='W'
+			raw_fibre2_flag ='W'
+			errormsg='Not enough calibration frames available. Wait for calibration OB to finish.'
 
-			rawbias_level = np.mean( [bias_list[0].counts,bias_list[-1].counts] )
+		####
+		#  BIAS Level
+		####
+
+		if len(bias_list) > 1:
+
+			rawbias_level = np.median( [bias_list[0].counts,bias_list[-1].counts] )
 
 			context['rawbias_level']        = '%.2f' % rawbias_level
 
@@ -85,10 +97,14 @@ def index_context():
 				context['rawbias_flag'] = 'G'
 			else:
 				context['rawbias_flag'] = 'B'
+		else:
+			context['rawbias_flag'] = 'W'
 
-			####
-			#  FLAT Level
-			####
+		####
+		#  FLAT Level
+		####
+
+		if len(flat_list) > 1:
 
 			rawflat1_level  = np.array([flat_list[0].counts1,flat_list[-1].counts1])
 			rawflat2_level  = np.array([flat_list[0].counts2,flat_list[-1].counts2])
@@ -112,10 +128,16 @@ def index_context():
 			else:
 				context['rawflat2_flag'] = 'B'
 
+		else:
+			context['rawflat1_flag']       ='W'
+			context['rawflat2_flag']       ='W'		
 
-			####
-			#  LAMP Level
-			####
+
+		####
+		#  LAMP Level
+		####
+
+		if len(lamp_list) > 0:
 
 			rawlamp1_level  = lamp_list[0].counts1
 			rawlamp2_level  = lamp_list[0].counts2
@@ -134,13 +156,11 @@ def index_context():
 				context['rawThArNe2_flag'] = 'G'
 			else:
 				context['rawThArNe2_flag'] = 'B'
-			errormsg='None'
-
 		else:
-			error_present=False
-			raw_fibre1_flag ='W'
-			raw_fibre2_flag ='W'
-			errormsg='Not enough calibration frames available. Wait for calibration OB to finish.'      
+			context['rawThArNe1_flag'] = 'W'
+			context['rawThArNe2_flag'] = 'W'			
+
+
 
 
 		context['bias_list']        = bias_list
@@ -157,7 +177,7 @@ def index_context():
 	except ObjectDoesNotExist:
 
 		night =  NIGHT(calibration_night=Time(2415020.5,format='jd', scale='utc').datetime,all_rawcal = False, masterbias = False, masterflat = False, wavesol_flag = False)
-		context['cal_night']=night
+		context['cal_night'] 			= night
 		context['error_present']        = True
 		context['errormsg']             = 'No FEROS files present!'
 
